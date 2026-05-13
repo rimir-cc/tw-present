@@ -1,0 +1,35 @@
+title: $:/plugins/rimir/present/layouts
+type: text/vnd.tiddlywiki
+
+! Layouts
+
+Each slide's layout is selected by the `mm.slide-layout` field (or whichever field you pass as `layout-field=`). The named value resolves to `$:/plugins/rimir/present/layouts/<name>` — drop in your own tiddler with that title to author new layouts.
+
+|!Name |!Effect |!Slide-side fields read |
+|`default` |Caption + body. The fallback when no layout is set or the named layout doesn't exist. |`caption`, `text` |
+|`title` |Big centered caption with the body shown smaller below. For intro / section-divider slides. |`caption`, `text` |
+|`two-column` |Two equal columns. Reads `mm.slide-left` / `mm.slide-right` if present (wikitext), otherwise the entire `text` body fills the left column. |`caption`, `mm.slide-left`, `mm.slide-right`, `text` |
+|`quote` |Pull-quote with optional attribution. The body becomes the quote. |`text`, `caption`, `mm.slide-attribution` |
+|`image` |Image at top, caption + body below. |`mm.slide-image` (image src), `caption`, `text` |
+|`full` |No chrome — body fills the stage. Use for custom-CSS slides. |`text` |
+
+!! Authoring a new layout
+
+Create a tiddler named `$:/plugins/rimir/present/layouts/<name>` of type `text/vnd.tiddlywiki`. Inside, you can read the slide's fields via `<<currentTiddler>>` and `{{!!field-name}}`. The widget wraps the layout in `<$tiddler tiddler=<<slide>>>` before transcluding, so all field references resolve against the active slide automatically.
+
+Example skeleton:
+
+```
+title: $:/plugins/rimir/present/layouts/bullets
+
+\procedure render-bullets()
+<div class="rr-present-layout my-bullets-layout">
+<h2>{{!!caption}}</h2>
+<$transclude $mode="block"/>
+</div>
+\end render-bullets
+
+<$transclude $variable="render-bullets"/>
+```
+
+Then set `mm.slide-layout=bullets` on slides that should use it.

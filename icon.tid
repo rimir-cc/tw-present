@@ -1,0 +1,9 @@
+title: $:/plugins/rimir/present/icon
+type: image/svg+xml
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2.5" y="3.5" width="19" height="13" rx="1.5"/>
+  <path d="M9 19h6"/>
+  <path d="M12 16.5v2.5"/>
+  <polygon points="10,7 10,13 15,10" fill="currentColor" stroke="none"/>
+</svg>

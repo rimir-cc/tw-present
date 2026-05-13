@@ -1,0 +1,338 @@
+title: $:/plugins/rimir/present/styles
+tags: $:/tags/Stylesheet
+type: text/vnd.tiddlywiki
+
+\rules only filteredtranscludeinline transcludeinline macrodef macrocallinline html
+
+/* ------------------------------------------------------------------------
+   $present overlay — fullscreen slide player
+   ------------------------------------------------------------------------ */
+
+.rr-present-root {
+    position: fixed;
+    inset: 0;
+    /* High z-index so the player sits above page-level overlays that TW or
+       other plugins might render (performance report, modals, sticky bars
+       etc.). 9000 was not enough in practice. */
+    z-index: 2147483000;
+    background: <<colour tiddler-background>>;
+    color: <<colour foreground>>;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+    font-size: 1.2rem;
+}
+
+.rr-present-empty {
+    margin: auto;
+    color: <<colour muted-foreground>>;
+    font-style: italic;
+}
+
+/* ---------- top bar ---------- */
+
+.rr-present-topbar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1em;
+    padding: 0.5em 1em;
+    background: <<colour page-background>>;
+    border-bottom: 1px solid <<colour tab-divider>>;
+}
+
+.rr-present-title {
+    font-weight: 600;
+    color: <<colour foreground>>;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 24em;
+}
+
+.rr-present-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25em;
+    color: <<colour muted-foreground>>;
+    font-size: 0.9em;
+}
+
+.rr-present-crumb {
+    background: none;
+    border: 1px solid transparent;
+    color: <<colour muted-foreground>>;
+    cursor: pointer;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    font-size: inherit;
+    line-height: 1.4;
+    max-width: 16em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rr-present-crumb:hover {
+    background: <<colour pre-background>>;
+    border-color: <<colour tab-divider>>;
+    color: <<colour foreground>>;
+}
+
+.rr-present-crumb-current {
+    color: <<colour foreground>>;
+    font-weight: 500;
+    cursor: default;
+}
+
+.rr-present-crumb-current:hover {
+    background: none;
+    border-color: transparent;
+}
+
+.rr-present-crumb-home {
+    font-weight: 700;
+}
+
+.rr-present-crumb-sep {
+    color: <<colour very-muted-foreground>>;
+    padding: 0 0.1em;
+}
+
+.rr-present-actions {
+    display: flex;
+    gap: 0.5em;
+}
+
+.rr-present-btn {
+    border: 1px solid <<colour tab-divider>>;
+    background: <<colour tiddler-background>>;
+    color: <<colour foreground>>;
+    padding: 0.25em 0.7em;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.rr-present-btn:hover {
+    background: <<colour pre-background>>;
+}
+
+.rr-present-btn-active {
+    background: <<colour primary>>;
+    color: <<colour background>>;
+    border-color: <<colour primary>>;
+}
+
+.rr-present-close-btn {
+    font-size: 1.2em;
+    line-height: 1;
+    padding: 0.1em 0.5em;
+}
+
+/* ---------- stage ---------- */
+
+.rr-present-stage {
+    overflow: auto;
+    padding: 2em 3em;
+    display: grid;
+    place-items: center;
+}
+
+.rr-present-stage-empty {
+    color: <<colour muted-foreground>>;
+    font-style: italic;
+}
+
+/* ---------- layouts ---------- */
+
+.rr-present-layout {
+    width: 100%;
+    max-width: 1100px;
+    line-height: 1.5;
+}
+
+.rr-present-slide-caption {
+    font-size: 1.6em;
+    font-weight: 600;
+    margin: 0 0 0.6em 0;
+    color: <<colour foreground>>;
+    border-bottom: 1px solid <<colour tab-divider>>;
+    padding-bottom: 0.3em;
+}
+
+.rr-present-slide-body {
+    font-size: 1.1em;
+}
+
+.rr-present-slide-body p {
+    margin: 0.5em 0;
+}
+
+.rr-present-layout-title {
+    display: grid;
+    place-items: center;
+    min-height: 60vh;
+    text-align: center;
+}
+
+.rr-present-title-main {
+    font-size: 3em;
+    font-weight: 700;
+    margin: 0 0 0.3em 0;
+    color: <<colour foreground>>;
+}
+
+.rr-present-title-sub {
+    font-size: 1.3em;
+    color: <<colour muted-foreground>>;
+}
+
+.rr-present-layout-two-column .rr-present-two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2em;
+    align-items: start;
+}
+
+.rr-present-layout-quote {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-style: italic;
+    font-size: 1.6em;
+}
+
+.rr-present-quote {
+    border: none;
+    background: none;
+    margin: 0;
+    padding: 0 1em;
+    line-height: 1.6;
+}
+
+.rr-present-quote-attrib {
+    margin-top: 1em;
+    font-size: 0.7em;
+    font-style: normal;
+    color: <<colour muted-foreground>>;
+}
+
+.rr-present-layout-image {
+    display: grid;
+    gap: 1em;
+}
+
+.rr-present-image-frame img {
+    max-width: 100%;
+    max-height: 60vh;
+    display: block;
+    margin: 0 auto;
+}
+
+.rr-present-image-caption {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.rr-present-layout-full {
+    width: 100%;
+    max-width: none;
+    padding: 0 2em;
+}
+
+/* ---------- bottom HUD ---------- */
+
+.rr-present-hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4em 1em;
+    background: <<colour page-background>>;
+    border-top: 1px solid <<colour tab-divider>>;
+    color: <<colour muted-foreground>>;
+    font-size: 0.9em;
+}
+
+.rr-present-hud-counter {
+    font-feature-settings: "tnum" 1;
+}
+
+.rr-present-hud-label {
+    color: <<colour foreground>>;
+    font-weight: 500;
+}
+
+.rr-present-hud-deep {
+    color: <<colour primary>>;
+    font-weight: 600;
+}
+
+/* ---------- notes / help overlays ---------- */
+
+.rr-present-notes-panel,
+.rr-present-help-panel {
+    position: fixed;
+    right: 1.5em;
+    bottom: 4em;
+    width: min(420px, 90vw);
+    max-height: 60vh;
+    overflow: auto;
+    background: <<colour tiddler-background>>;
+    color: <<colour foreground>>;
+    border: 1px solid <<colour tab-divider>>;
+    border-radius: 8px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+    padding: 1em;
+    z-index: 2147483100;
+    font-size: 0.95em;
+}
+
+.rr-present-notes-text {
+    white-space: pre-wrap;
+    margin: 0;
+    font-family: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+}
+
+.rr-present-notes-empty {
+    color: <<colour muted-foreground>>;
+}
+
+.rr-present-help-panel h2 {
+    margin: 0 0 0.5em 0;
+    font-size: 1.1em;
+}
+
+.rr-present-help-panel table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.rr-present-help-panel td {
+    padding: 0.2em 0.4em;
+    vertical-align: top;
+}
+
+.rr-present-help-panel td:first-child {
+    white-space: nowrap;
+    color: <<colour muted-foreground>>;
+}
+
+.rr-present-help-panel kbd {
+    display: inline-block;
+    padding: 0.05em 0.4em;
+    background: <<colour pre-background>>;
+    border: 1px solid <<colour tab-divider>>;
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 0.85em;
+    margin-right: 0.2em;
+}

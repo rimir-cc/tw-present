@@ -1,0 +1,53 @@
+created: 20260513000000000
+modified: 20260513000000000
+rdt.order: 2
+rdt.plugin-key: present
+rdt.plugin-name: present
+rdt.plugin-subtitle: Fullscreen slide player with 2D nav and deep-dive breadcrumb
+rdt.section: Architecture
+title: $:/plugins/rimir/present/doc/architecture
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Pipeline
+
+# ''Filter resolution'' — at `render()` time, the widget evaluates `slides=<filter>` against the widget context to get an ordered list of slide tiddler titles.
+# ''Grid construction'' — for each slide, the widget reads the `section-field` and groups consecutive slides with the same value into one //section//. Sections are the horizontal axis; slides within a section are the vertical axis. Slides without a section-field value get their own solo bucket (so two unrelated tiddlers don't accidentally bucket together).
+# ''Chrome render'' — a fixed-position fullscreen overlay, structured as `top-bar | stage | bottom-HUD`. The stage is where slide content lives; the top bar carries the deck title, breadcrumb, and action buttons; the HUD carries position counter and current-slide caption.
+# ''Current-slide render'' — the widget resolves the slide's `layout-field` (default `mm.slide-layout`) to a tiddler under `$:/plugins/rimir/present/layouts/`; if missing, falls back to `default`. It builds a one-shot wikitext widget tree `<$tiddler tiddler=<<slide>>><$transclude $tiddler=<<layout>>/></$tiddler>` which gives the layout template access to the slide's fields via `<<currentTiddler>>` and `{{!!field}}`.
+
+!! State model
+
+The widget keeps //navigation state// in instance variables (not in state tiddlers): `this.section`, `this.slide`, `this.stack` (array of stack entries), and `this.deepTiddler` (current ad-hoc slide title or null). State tiddlers are only used to drive //open/close// from outside, via `<$reveal>` wrapping the widget — that way, opening a presentation is a one-line state-tiddler write from anywhere in the wiki.
+
+Closing fires `on-close-actions` (typical: clear the open-state tiddler). The parent `$reveal` sees the clear and calls our widget's `removeChildDomNodes`, which tears down the keydown listener and the overlay DOM.
+
+!! Navigation stack
+
+Each stack entry is one of:
+
+* `{ kind: "grid", section: i, slide: j }` — a position in the deck grid (the deck root, before any deep-dive).
+* `{ kind: "deep", tiddler: "..." }` — an off-path tiddler reached by clicking a link.
+
+Diving into a tiddler pushes a snapshot of the //current// location onto the stack and sets `deepTiddler`. Popping (via Esc, the Home button, or a breadcrumb segment) walks back. The breadcrumb above the slide stage renders the stack as clickable chips; the leftmost chip (`⌂`) is always present and pops everything.
+
+A deep-dive view always renders with the `default` layout — using the slide's own layout would be wrong (you've dived //off// the deck path; the layout was meant for a different slide).
+
+!! Link interception
+
+Clicks inside the stage bubble up to a single delegated handler. The handler walks the event target up until it hits either an `<a>` element or a `.tc-tiddlylink` (TW's `<$link>` produces these). The target title is read in order from:
+
+# `data-tiddler-title` (set by TW's `<$link>` widget)
+# `data-tw-target-title` (alternative; rarer)
+# `href` attribute (plain anchors)
+
+Internal links that resolve to a tiddler trigger a deep-dive. External links (no tiddler resolves) fall through to the browser default — open in a new tab as normal.
+
+!! Performance
+
+The widget renders //only the current slide// — neighbours are not pre-rendered. Each navigation tears down the previous slide widget tree and builds the new one. For decks with under a few hundred slides this is more than fast enough and avoids issues with embedded heavy widgets (mindmaps, graphs) being kept warm for slides the user never reaches.
+
+</$fill>
+</$transclude>

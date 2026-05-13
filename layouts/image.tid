@@ -1,0 +1,22 @@
+title: $:/plugins/rimir/present/layouts/image
+type: text/vnd.tiddlywiki
+
+\procedure render-image()
+<div class="rr-present-layout rr-present-layout-image">
+<$let img={{!!mm.slide-image}} caption={{!!caption}}>
+<div class="rr-present-image-frame">
+<$list filter="[<img>!is[blank]]" variable="_" emptyMessage="<em>(no image — set mm.slide-image)</em>">
+<img src=<<img>>/>
+</$list>
+</div>
+<$list filter="[<caption>!is[blank]]" variable="_">
+<div class="rr-present-image-caption"><$text text=<<caption>>/></div>
+</$list>
+<div class="rr-present-image-body">
+<$transclude $mode="block"/>
+</div>
+</$let>
+</div>
+\end render-image
+
+<$transclude $variable="render-image"/>

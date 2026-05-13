@@ -1,0 +1,26 @@
+title: $:/plugins/rimir/present/settings
+type: text/vnd.tiddlywiki
+
+! present settings
+
+This plugin is largely stateless — its behaviour is driven by the attributes you pass to `<$present>` and the fields on the slide tiddlers themselves. There is one global config tiddler:
+
+|!Setting |!Tiddler |!Default |!Notes |
+|Disable global Esc handler |`$:/config/rimir/present/no-esc-close` |empty |Set to `yes` to suppress the built-in Escape-key handler. Useful when embedding `<$present>` inside an outer modal/popup with its own Esc handling. |
+
+!! Per-widget attributes
+
+|!Attribute |!Default |!Purpose |
+|`slides` |(required) |Filter yielding slide-tiddler titles in playback order. |
+|`section-field` |`mm.slide-of` |Field on each slide tiddler whose value groups slides into //sections// (horizontal axis of 2D nav). Slides with the same value form one vertical stack. |
+|`layout-field` |`mm.slide-layout` |Field naming the layout template (e.g. `default`, `title`, `two-column`). Resolves to `$:/plugins/rimir/present/layouts/<name>`. Missing/blank → `default`. |
+|`caption-field` |`caption` |Field used to label slides in the HUD and breadcrumb. Falls back to the leaf segment of the tiddler title. |
+|`notes-field` |`mm.slide-notes` |Field carrying presenter notes (shown in the N-overlay). |
+|`title` |empty |Display label for the deck (shown in the top-left of the overlay). |
+|`start-section` |`0` |Zero-based section index to open on. |
+|`start-slide` |`0` |Zero-based slide index within the starting section. |
+|`on-close-actions` |empty |Wikitext actions invoked when the user closes the overlay (Esc / × button). Typical use: clear a "presentation is open" state tiddler. |
+
+!! Authoring layouts
+
+Add a tiddler `$:/plugins/rimir/present/layouts/<name>` of type `text/vnd.tiddlywiki`. Inside, you can read the slide's fields via `<<currentTiddler>>` — for example `{{!!caption}}` for the caption, `<$transclude $mode="block"/>` for the body. Set `<<currentTiddler>>!!mm.slide-layout` on your slides to use it.

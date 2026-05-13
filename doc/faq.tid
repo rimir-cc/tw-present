@@ -1,0 +1,43 @@
+created: 20260513000000000
+modified: 20260513000000000
+rdt.order: 5
+rdt.plugin-key: present
+rdt.plugin-name: present
+rdt.plugin-subtitle: Fullscreen slide player with 2D nav and deep-dive breadcrumb
+rdt.section: FAQ
+title: $:/plugins/rimir/present/doc/faq
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!!! Why two plugins instead of bundling the player into mindmap?
+
+Because "play a sequence of tiddlers" is broader than "play mindmap slides". A separate player keeps the data shape (filters yielding tiddlers) decoupled from the data source (mindmap, a tagged set, a generated list, a Trello-style board, anything else). Mindmap supplies the filter operator that flattens a presentation into slide titles; the player doesn't know or care where those titles came from.
+
+!!! How does the deep-dive work — am I just opening tiddlers?
+
+Yes — clicking a wikitext link inside a slide //navigates inside the overlay//. The widget intercepts the click, pushes the current location onto an internal stack, and re-renders the stage with the linked tiddler as a one-shot slide (using the `default` layout). The breadcrumb at the top shows the depth; click any segment to pop back, or use Esc which pops one level at a time. Once the stack is empty, Esc closes the overlay.
+
+!!! Can the player remember my position across reloads?
+
+No — navigation state is in-memory only by design. A presentation is a single live session; mid-session reloads aren't a use-case we support. If you need bookmarkable slide positions, write a thin wrapper that mirrors the state into a `$:/state/` tiddler.
+
+!!! How big can a deck be?
+
+Practically unlimited — only the current slide renders. Decks of hundreds of slides are fine. Decks of thousands of slides will be fine to play but slow to //compute the grid// (the widget evaluates the filter once and walks every result to read its section-field).
+
+!!! Why does Space behave differently from →?
+
+`→` always moves to the next section (jumping past any remaining vertical slides). `Space` is //linear//: it goes down within the current section first, only jumping right when the bottom of the section is reached. That mirrors reveal.js and matches the "walk the entire deck" mental model.
+
+!!! Why does Esc not close immediately when I've dived deep?
+
+So you can dive into a referenced tiddler during a Q&A, then Esc back to where you were — the same use-case as a back button in a browser. If you want one-press exit no matter what, pop everything first with the `⌂` button and Esc once.
+
+!!! Are external links followed normally?
+
+Yes — only links that resolve to a tiddler in the wiki trigger a deep-dive. Anything else (URLs, mailto, anchors that don't resolve) falls through to the browser's default handling.
+
+</$fill>
+</$transclude>

@@ -1,0 +1,54 @@
+created: 20260513000000000
+modified: 20260513000000000
+rdt.order: 6
+rdt.plugin-key: present
+rdt.plugin-name: present
+rdt.plugin-subtitle: Fullscreen slide player with 2D nav and deep-dive breadcrumb
+rdt.section: Dev Workflow
+title: $:/plugins/rimir/present/doc/dev-workflow
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Tests
+
+Unit tests live in `test/`. Run from the plugin's test-edition:
+
+```
+cd dev-wiki/plugins/rimir/present/test-edition
+TIDDLYWIKI_PLUGIN_PATH=/home/mrichter/projects/tw5-cc/dev-wiki/plugins \
+  npx tiddlywiki . --test
+```
+
+The `TIDDLYWIKI_PLUGIN_PATH` is needed because `tiddlywiki.info` references `rimir/present` by short name — TW can only resolve that from a directory it's been told contains plugins.
+
+Current coverage:
+
+* `test-grid.js` — `_buildGrid` partition rules (consecutive grouping, solo buckets for missing/blank section-field, custom field name, empty input).
+
+The interactive parts (keydown handlers, DOM lifecycle, link interception) aren't unit-tested — exercise them manually after changes.
+
+!! Manual checklist
+
+Before bumping a release, run through:
+
+# Open a presentation via the mindmap ''▶ Play'' button → overlay appears, first slide visible, HUD shows `1/N · 1/M`.
+# `→` / `←` walk between sections; `↑` / `↓` walk within a section. Counter updates.
+# `Space` linearly advances down-then-right; `Backspace` reverses.
+# `Home` jumps to first slide; `End` to last.
+# Click a wikitext link inside a slide → deep-dive: breadcrumb shows depth, stage re-renders.
+# `Esc` pops one level; click `⌂` to pop everything at once.
+# `N` shows the notes panel (or empty placeholder); reopen on next slide shows that slide's notes.
+# `?` shows help; toggling off shows the slide again.
+# `×` button closes the deck and clears `$:/state/rimir/mindmap/present-open`.
+# Shift+F2 inside the mindmap canvas opens the active presentation. F5 / Shift+F5 stay as browser reload — F2 alone is taken by the edit-node intercept, so the player layers Shift on top.
+# Open mindmap, switch the modebar to ''Presentation'' on a deck with at least one slide — both the header Play button AND the small ▶ next to the dropdown become visible. Switch back to ''Body'' — both hide.
+# Open a deck with no slides → both Play buttons hidden, Shift+F2 no-ops.
+
+!! Versioning
+
+Standard rules apply — patch bumps for fixes / small additions, minor bumps when adding new attributes or layouts that other plugins might depend on. Always update `changelog.tid` alongside any `plugin.info` version bump.
+
+</$fill>
+</$transclude>

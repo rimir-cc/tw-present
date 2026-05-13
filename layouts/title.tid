@@ -1,0 +1,21 @@
+title: $:/plugins/rimir/present/layouts/title
+type: text/vnd.tiddlywiki
+
+\procedure render-title()
+<div class="rr-present-layout rr-present-layout-title">
+<div class="rr-present-title-stack">
+<h1 class="rr-present-title-main">
+<$let caption={{!!caption}}>
+<$list filter="[<caption>!is[blank]]" variable="_" emptyMessage="<$view field='title'/>">
+<$text text=<<caption>>/>
+</$list>
+</$let>
+</h1>
+<div class="rr-present-title-sub">
+<$transclude $mode="block"/>
+</div>
+</div>
+</div>
+\end render-title
+
+<$transclude $variable="render-title"/>

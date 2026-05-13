@@ -1,0 +1,88 @@
+created: 20260513000000000
+modified: 20260513000000000
+rdt.order: 4
+rdt.plugin-key: present
+rdt.plugin-name: present
+rdt.plugin-subtitle: Fullscreen slide player with 2D nav and deep-dive breadcrumb
+rdt.section: Examples
+title: $:/plugins/rimir/present/doc/examples
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Example 1 — minimal flat deck
+
+Plain tagged slides; no grouping; arrows walk linearly.
+
+```
+<$button>
+<$action-setfield $tiddler="$:/state/my-deck/open" text="yes"/>
+Play deck
+</$button>
+
+<$reveal state="$:/state/my-deck/open" text="yes" type="match">
+    <$present
+        slides="[tag[Slides]sort[order]]"
+        section-field="—"
+        title="My deck"
+        on-close-actions="<$action-setfield $tiddler='$:/state/my-deck/open' text=''/>"
+    />
+</$reveal>
+```
+
+Setting `section-field="—"` (a field nobody will have) makes every slide its own section — arrow keys then behave linearly, no vertical-stack confusion.
+
+!! Example 2 — grouped deck
+
+Each top-level section gets its own column of slides; vertical arrows walk within a section.
+
+Author slides with fields:
+
+* `tags: Slides`
+* `section: intro` (or `body`, `wrap-up`, …)
+* `caption: …`
+* body text = wikitext
+
+Then play with:
+
+```
+<$present
+    slides="[tag[Slides]sort[order]]"
+    section-field="section"
+    caption-field="caption"
+    title="Q2 review"
+/>
+```
+
+!! Example 3 — playing a mindmap presentation
+
+If you're using `rimir/mindmap` v0.3.0+, presentations are first-class. Set `mm.presentation` on a view tiddler, then click ''▶ Play'' in the preview-pane's Presentation tab (header bar or next to the modebar dropdown) — or press ''Shift+F2'' when focused in the canvas.
+
+The page-template tiddler that handles the activation is `$:/plugins/rimir/mindmap/templates/present-overlay`. It reads the active presentation from `$:/state/rimir/mindmap/present-target` and wires the deck via the `mm-presentation-slides` filter operator.
+
+!! Example 4 — authoring a custom layout
+
+Add a tiddler `$:/plugins/rimir/present/layouts/bullets`:
+
+```
+\procedure render-bullets()
+<div class="rr-present-layout my-bullets">
+<h2>{{!!caption}}</h2>
+<$list filter="[<currentTiddler>has[mm.slide-bullets]]" variable="_">
+<ul>
+<$list filter="[<currentTiddler>get[mm.slide-bullets]split[\n]!is[blank]]" variable="line">
+<li><$wikify name="r" text=<<line>>><<r>></$wikify></li>
+</$list>
+</ul>
+</$list>
+</div>
+\end render-bullets
+
+<$transclude $variable="render-bullets"/>
+```
+
+Then on a slide tiddler set `mm.slide-layout=bullets` and put your bullet lines in `mm.slide-bullets` (one per line).
+
+</$fill>
+</$transclude>

@@ -1,0 +1,9 @@
+created: 20260513000000000
+modified: 20260513000000000
+title: $:/plugins/rimir/present/changelog
+type: text/vnd.tiddlywiki
+
+! Changelog
+
+|!Version |!Date |!Changes |
+|v0.1.0 |2026-05-13 |Initial release. `$present` widget renders a fullscreen slide-overlay over any filter-driven set of tiddlers. 2D navigation (←/→ between sections, ↑/↓ within a section), link-driven deep-dive with a breadcrumb that pops you back, configurable per-slide layout via `mm.slide-layout` (templates `default`, `title`, `two-column`, `quote`, `image`, `full`), presenter notes overlay (N), keyboard cheat sheet (?). Engine-agnostic — slide source is supplied as a filter |

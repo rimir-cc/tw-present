@@ -1,0 +1,47 @@
+created: 20260513000000000
+modified: 20260513000000000
+rdt.hub-category: visualization
+rdt.hub-category-name: Visualization & Layout
+rdt.hub-order: 25
+rdt.order: 1
+rdt.plugin-key: present
+rdt.plugin-name: present
+rdt.plugin-subtitle: Fullscreen slide player with 2D nav and deep-dive breadcrumb
+rdt.section: Overview
+title: $:/plugins/rimir/present/doc/overview
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! What it does
+
+`rimir/present` ships a single widget — `$present` — that takes a //filter// yielding ordered tiddler titles and plays them as a fullscreen slide deck. The deck is engine-agnostic: any plugin or hand-authored wikitext that can produce an ordered list of slide tiddlers can drive a presentation.
+
+The widget is designed for two use-cases:
+
+* ''Sequenced playback'' — walk a deck linearly with arrow keys or space.
+* ''Discussion-driven dive-in'' — during a talk, click any link in a slide to "dive in" to that tiddler, with a breadcrumb that pops you back to where you came from.
+
+!! Why it exists
+
+The mindmap plugin (`rimir/mindmap`) ships a //slides as tiddlers// model — each slide is a real tiddler with `caption` / `mm.slide-layout` / `mm.slide-notes` / body — and named-presentation tiddlers (`mm.slides-order`) that group nodes' slides into a playlist. Until v0.3.0, no player existed: slides could be authored and previewed but not played. The natural shape was //two plugins//, not one — the player is a generic slide stage, the mindmap supplies the data. This plugin is that player.
+
+!! Features
+
+* ''Filter-parameterized slide source'' — `slides="<filter>"`. No coupling to any data model.
+* ''reveal.js-style 2D navigation'' — `←/→` between //sections// (top-level groups), `↑/↓` between //slides// within a section. Sections are derived from a configurable group-field on each slide tiddler.
+* ''Deep-dive breadcrumb'' — clicking a wikitext link inside a slide pushes the current location onto a navigation stack and renders the linked tiddler as an ad-hoc slide. The breadcrumb at the top shows where you came from; clicking any crumb pops back. `Esc` pops one level; pops past the deck root close the overlay.
+* ''Layout templates'' — `mm.slide-layout` selects a wikitext template under `$:/plugins/rimir/present/layouts/`. Ships with `default`, `title`, `two-column`, `quote`, `image`, `full`. Add your own by creating a layout tiddler with the matching name.
+* ''Presenter notes + help overlays'' — `N` toggles notes (configurable field), `?` opens the keyboard cheat sheet.
+* ''Activated by state-tiddler'' — wrap `$present` in `$reveal` to gate it on an "is presenting" state; companion plugins wire a Play button that flips the state.
+
+!! Plugin files
+
+|!File |!Role |
+|`widget.js` |The `$present` widget — overlay DOM, 2D nav state machine, link interception, layout dispatch |
+|`styles.tid` |Overlay CSS — full-viewport positioning, layout typography, breadcrumb + HUD |
+|`layouts/*.tid` |Wikitext layout templates: `default`, `title`, `two-column`, `quote`, `image`, `full` |
+
+</$fill>
+</$transclude>

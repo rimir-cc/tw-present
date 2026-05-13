@@ -1,0 +1,46 @@
+title: $:/plugins/rimir/present/readme
+type: text/vnd.tiddlywiki
+
+! present
+
+Fullscreen slide player for any ordered set of tiddlers. Designed as a generic presentation surface — the slide source is parameterized via a filter — with reveal.js-style 2D navigation, link-driven deep-dive (with a breadcrumb that pops you back), and a pluggable layout system.
+
+!! Key features
+
+* ''Filter-parameterized'' — pass any filter that yields slide-tiddler titles in order. No coupling to a particular content model.
+* ''2D navigation'' — `←/→` walk between //sections// (one section per group of slides), `↑/↓` walk between slides //within// the current section. Sections are derived from a configurable group-field on each slide tiddler.
+* ''Deep-dive via clicks'' — clicking a wikitext link inside a slide pushes the current location onto a navigation stack and renders the linked tiddler as an ad-hoc slide. The breadcrumb at the top shows where you came from; click any segment to pop back.
+* ''Layout system'' — `mm.slide-layout` (configurable field) maps to a layout template under `$:/plugins/rimir/present/layouts/`. Ships with `default`, `title`, `two-column`, `quote`, `image`, `full`. Author your own by adding tiddlers with the matching name.
+* ''Notes & help overlays'' — `N` toggles presenter notes (read from a configurable field). `?` opens the keyboard cheat sheet.
+* ''Engine-agnostic'' — does not depend on a mindmap, list, or any specific producer. Companion plugins (e.g. `rimir/mindmap` v0.3+) supply the filter; this plugin just plays.
+
+!! Prerequisites
+
+* TiddlyWiki 5.3.0+
+* Optional: `rimir/theme` for the shared `rr-` style hooks
+* Optional: `rimir/doc-template` for the branded documentation tab
+
+!! Quick start
+
+Render the player anywhere with a filter that yields slide-tiddler titles:
+
+```
+<$present
+    slides="[tag[Slides]sort[mm.slide-order]]"
+    section-field="mm.slide-of"
+    layout-field="mm.slide-layout"
+    caption-field="caption"
+    notes-field="mm.slide-notes"
+    title="My deck"
+/>
+```
+
+Wrap with `$reveal` if you want to gate the overlay on a state tiddler:
+
+```
+<$reveal state="$:/state/rimir/present/open" text="yes" type="match">
+    <$present slides={{{ [<presentation>mm-presentation-slides[]] }}} title=<<presentation>> />
+</$reveal>
+```
+
+See the //documentation// tab for layouts, keyboard reference, and the mindmap integration.

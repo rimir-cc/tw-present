@@ -1,0 +1,17 @@
+title: $:/plugins/rimir/present/layouts/default
+type: text/vnd.tiddlywiki
+
+\procedure render-default()
+<div class="rr-present-layout rr-present-layout-default">
+<$let caption={{!!caption}}>
+<$list filter="[<caption>!is[blank]]" variable="_">
+<header class="rr-present-slide-caption"><$text text=<<caption>>/></header>
+</$list>
+</$let>
+<div class="rr-present-slide-body">
+<$transclude $mode="block"/>
+</div>
+</div>
+\end render-default
+
+<$transclude $variable="render-default"/>

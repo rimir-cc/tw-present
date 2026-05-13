@@ -1,0 +1,30 @@
+title: $:/plugins/rimir/present/layouts/two-column
+type: text/vnd.tiddlywiki
+
+\procedure render-two-column()
+<div class="rr-present-layout rr-present-layout-two-column">
+<$let caption={{!!caption}}>
+<$list filter="[<caption>!is[blank]]" variable="_">
+<header class="rr-present-slide-caption"><$text text=<<caption>>/></header>
+</$list>
+</$let>
+<div class="rr-present-two-column-grid">
+<div class="rr-present-column rr-present-column-left">
+<$let left={{!!mm.slide-left}}>
+<$list filter="[<left>!is[blank]]" variable="_" emptyMessage="<$transclude $mode='block'/>">
+<$wikify name="rendered" text=<<left>>><<rendered>></$wikify>
+</$list>
+</$let>
+</div>
+<div class="rr-present-column rr-present-column-right">
+<$let right={{!!mm.slide-right}}>
+<$list filter="[<right>!is[blank]]" variable="_">
+<$wikify name="rendered" text=<<right>>><<rendered>></$wikify>
+</$list>
+</$let>
+</div>
+</div>
+</div>
+\end render-two-column
+
+<$transclude $variable="render-two-column"/>

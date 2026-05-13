@@ -1,0 +1,21 @@
+title: $:/plugins/rimir/present/layouts/quote
+type: text/vnd.tiddlywiki
+
+\procedure render-quote()
+<div class="rr-present-layout rr-present-layout-quote">
+<blockquote class="rr-present-quote">
+<$transclude $mode="block"/>
+</blockquote>
+<$let attribution={{!!mm.slide-attribution}} caption={{!!caption}}>
+<$list filter="[<attribution>!is[blank]] ~[<caption>!is[blank]]" variable="_">
+<footer class="rr-present-quote-attrib">
+— <$list filter="[<attribution>!is[blank]]" variable="_" emptyMessage="<$text text=<<caption>>/>">
+<$text text=<<attribution>>/>
+</$list>
+</footer>
+</$list>
+</$let>
+</div>
+\end render-quote
+
+<$transclude $variable="render-quote"/>

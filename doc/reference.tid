@@ -1,0 +1,68 @@
+created: 20260513000000000
+modified: 20260513000000000
+rdt.order: 3
+rdt.plugin-key: present
+rdt.plugin-name: present
+rdt.plugin-subtitle: Fullscreen slide player with 2D nav and deep-dive breadcrumb
+rdt.section: Reference
+title: $:/plugins/rimir/present/doc/reference
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Widget: `<$present>`
+
+|!Attribute |!Default |!Purpose |
+|`slides` |(required) |Filter expression yielding ordered slide-tiddler titles. Evaluated in the widget's context, so variables set above the widget are visible. |
+|`section-field` |`mm.slide-of` |Field whose value groups slides into sections (the horizontal nav axis). Slides without a value bucket individually. |
+|`layout-field` |`mm.slide-layout` |Field naming the layout template (resolved as `$:/plugins/rimir/present/layouts/<name>`). Missing/blank/unknown → `default`. |
+|`caption-field` |`caption` |Field used to label slides in the HUD and breadcrumb. Falls back to the leaf segment of the tiddler title. |
+|`notes-field` |`mm.slide-notes` |Field carrying presenter notes (shown in the N overlay). |
+|`title` |empty |Display label for the deck — appears in the top-left of the overlay. |
+|`start-section` |`0` |Zero-based section index to open on. |
+|`start-slide` |`0` |Zero-based slide index within the starting section. |
+|`on-close-actions` |empty |Wikitext actions invoked when the user closes the overlay. Typical use: clear a state tiddler that gated `$reveal`. |
+
+!! Keyboard
+
+|!Key |!Effect |
+|`←` `→` |Move between sections. Within a deep-dive view, no-op (use Esc / breadcrumb). |
+|`↑` `↓` |Move between slides within the current section. |
+|`Space` |Linear advance — down within section, then jump to next section's top slide. |
+|`Backspace` |Linear reverse. |
+|`Home` / `End` |Jump to first / last slide. Clears any deep-dive stack. |
+|`N` |Toggle the presenter-notes panel. |
+|`?` (or `/`) |Toggle the keyboard cheat sheet. |
+|`Esc` |Pop one stack level if deep-dived; close help/notes overlays if open; otherwise close the deck. |
+
+Set `$:/config/rimir/present/no-esc-close` to `yes` to disable the global Esc handler (e.g. when embedding inside another modal).
+
+!! Layout tiddlers
+
+Layouts live under `$:/plugins/rimir/present/layouts/<name>`. The widget transcludes the chosen layout with `currentTiddler` bound to the slide, so you can read the slide's fields directly:
+
+|!Layout |!Slide fields read |
+|`default` |`caption`, body text |
+|`title` |`caption` (large), body (subtitle) |
+|`two-column` |`caption`, `mm.slide-left`, `mm.slide-right`, body |
+|`quote` |body (the quote), `caption` or `mm.slide-attribution` (attribution) |
+|`image` |`mm.slide-image` (src), `caption`, body |
+|`full` |body — no chrome |
+
+!! Filter operator (in rimir/mindmap)
+
+|!Operator |!Input |!Output |
+|`[<pres>mm-presentation-slides[]]` |presentation tiddler titles |Flat ordered slide titles: for each input presentation, walks its `mm.slides-order` and concatenates each owner's slide tiddlers in `mm.slide-order` order. Owners that don't exist or have no slides are silently skipped. |
+
+The mindmap plugin wires this filter to `$present`'s `slides=` via the page-template tiddler `$:/plugins/rimir/mindmap/templates/present-overlay`.
+
+!! State tiddlers
+
+|!Tiddler |!Purpose |!Set by |
+|`$:/state/rimir/mindmap/present-target` |Title of the presentation tiddler to play |Play buttons (header + modebar ▶), Shift+F2 hotkey |
+|`$:/state/rimir/mindmap/present-open` |`yes` while overlay is open |Play button + Esc/× close action |
+|`$:/config/rimir/present/no-esc-close` |`yes` to disable global Esc handler |User config |
+
+</$fill>
+</$transclude>

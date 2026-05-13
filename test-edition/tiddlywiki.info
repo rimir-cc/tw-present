@@ -1,0 +1,11 @@
+{
+    "description": "Test edition for rimir/present",
+    "plugins": [
+        "tiddlywiki/jasmine",
+        "rimir/present"
+    ],
+    "themes": [
+        "tiddlywiki/vanilla",
+        "tiddlywiki/snowwhite"
+    ]
+}

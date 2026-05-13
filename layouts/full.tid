@@ -1,0 +1,10 @@
+title: $:/plugins/rimir/present/layouts/full
+type: text/vnd.tiddlywiki
+
+\procedure render-full()
+<div class="rr-present-layout rr-present-layout-full">
+<$transclude $mode="block"/>
+</div>
+\end render-full
+
+<$transclude $variable="render-full"/>

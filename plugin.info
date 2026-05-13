@@ -1,0 +1,15 @@
+{
+    "title": "$:/plugins/rimir/present",
+    "description": "Fullscreen slide player for ordered tiddler sets, with reveal.js-style 2D navigation and link-driven deep-dive breadcrumb",
+    "name": "present",
+    "author": "rimir",
+    "version": "0.1.0",
+    "core-version": ">=5.3.0",
+    "plugin-type": "plugin",
+    "dependents": [],
+    "soft-dependents": [
+        "$:/plugins/rimir/doc-template",
+        "$:/plugins/rimir/theme"
+    ],
+    "list": "readme documentation settings layouts changelog license"
+}
